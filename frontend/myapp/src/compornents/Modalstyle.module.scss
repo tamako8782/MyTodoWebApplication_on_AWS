@@ -1,0 +1,195 @@
+/* 共通のモーダルレイアウト */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* 背景の透明度を上げてモーダルを強調 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* モーダルが上に表示されるように */
+}
+
+.modalcontent {
+  background: #fff;
+  padding: 20px; /* 十分な余白を追加 */
+  margin: 0;
+  border-radius: 8px; /* モーダルの角を丸くする */
+  width: 40%;
+  max-width: 600px; /* 最大横幅を調整 */
+  max-height: 100%; 
+  overflow-y: auto; /* コンテンツが大きい場合スクロール可能に */
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3); /* 影を強調 */
+}
+
+/* Detailモーダルの中のスタイル */
+.detailtasks li {
+  border: none;
+  background-color: transparent;
+  padding: 10px 0; /* リスト項目間にスペースを追加 */
+}
+
+.detailtasks p {
+  border: 1px solid darkslategrey;
+  padding: 10px;
+  font-size: 16px;
+  margin: 5px 0; /* テキスト間の余白を調整 */
+}
+
+/* CreateModalとEditModalの共通スタイル */
+.tasktitle,
+.taskcontent,
+.taskstate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px; /* 余白を少し追加 */
+  margin: 0 0 15px; /* 各セクション間に余白を追加 */
+}
+
+.tasktitle input,
+.taskcontent textarea {
+  width: 100%; /* 横幅を100%にして入力領域を広く */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.taskstate select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.submitbutton,
+.cancelbutton,
+.deletebutton,
+.editbutton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submitbutton {
+  background-color: #5bc0de; /* 青色 */
+  color: #fff;
+}
+
+.submitbutton:hover {
+  background-color: #31b0d5; /* Hover時の青色 */
+  color: #fff;
+}
+
+.cancelbutton {
+  background-color: #d9534f !important; 
+  color: #fff;
+}
+
+.cancelbutton:hover {
+  background-color: #800000 !important;
+  color: #fff;
+}
+
+
+.deletebutton  {
+  background-color: #444444	 !important;
+  color: #fff;
+}
+
+.deletebutton:hover {
+  background-color: #202020	 !important;
+  color: #fff;
+}
+
+
+.editbutton {
+  background-color: #00c600	 !important;
+  color: #fff;
+}
+
+.editbutton:hover {
+  background-color: #008100	 !important;
+  color: #fff;
+}
+
+
+/* 
+Deleteモーダル専用のスタイル 
+*/
+.deleteOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 背景を半透明に */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001; /* DetailModal より前面に表示 */
+}
+
+.deleteModalContent {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  width: 90%; /* 横幅を90%にしてレスポンシブ対応 */
+  max-width: 400px; /* 最大横幅を400pxに制限 */
+  text-align: center;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3); /* 影を強調 */
+}
+
+.deleteMessage {
+  font-size: 18px;
+  font-weight: bold;
+  color: #d9534f; /* 警告色を追加 */
+  margin-bottom: 20px; /* 下部にスペースを追加 */
+}
+
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-evenly; /* ボタン間のスペースを均等にする */
+  gap: 10px;
+  margin-top: 20px;
+  
+  width: 100%; /* ボタンを含む親要素を100%幅に */
+}
+
+.yesButton, .noButton {
+  width: 100px; /* ボタンの幅を固定 */
+  padding: 10px 20px; /* ボタン内の余白 */
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  height: 40px !important;
+  cursor: pointer;
+}
+
+
+
+.yesButton {
+  background-color: #5bc0de; /* 青色 */
+  color: #fff;
+
+}
+
+.noButton {
+  background-color: #d9534f; /* 赤色 */
+  color: #fff;
+
+}
+
+.yesButton:hover {
+  background-color: #31b0d5; /* Hover時のYesボタンの色 */
+}
+
+
+.noButton:hover {
+  background-color: #c9302c; /* Hover時の赤色 */
+}

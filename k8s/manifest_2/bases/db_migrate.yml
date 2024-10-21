@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-job
+spec:
+  template:
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: busybox
+        command: ['sh', '-c', 'until nslookup yama-db.default.svc.cluster.local; do echo waiting for db; sleep 5; done;sleep 10'] #nslookupが成功して名前解決できた後、さらに10秒間待機
+      containers:
+      - name: db-migrate
+        image: tamako8782/mytodoapp:db-migrate-prodv6
+        env:
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: yama-secret
+              key: MYSQL_HOST
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: yama-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: yama-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: yama-secret
+              key: MYSQL_DATABASE
+        - name: MIGRATIONS_DIR
+          value: "/migrations"
+      restartPolicy: OnFailure
+      imagePullSecrets:
+      - name: yamasec
+
+

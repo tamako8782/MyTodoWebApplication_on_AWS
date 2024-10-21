@@ -1,0 +1,252 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family:sans-serif;
+}
+
+body {
+  font-family: sans-serif;
+  color:darkslategrey;
+  background-color:aqua;
+}
+
+
+header {
+  font-size: 20px;
+  width:100% ;
+  height: 20%;
+
+}
+
+/*画面の青白いとこ*/
+main {
+  display: flex;
+  flex-direction: column; /* 上下に配置 */
+  font-size: 30px;
+}
+
+li {
+  list-style-type: none;
+  justify-content: space-between;
+  display: block;
+  width:80% ;
+  min-width: 200px; /* 横幅の下限を設定 */
+
+  align-items: center; /* タスク名とボタンの縦方向を揃える */
+}
+
+/*タスクの中身の配置とか*/
+main li {
+  border: 1px solid #2f5167;
+  padding-left: 20px;
+  padding-bottom: 8px;
+  border-radius: 9px;
+}
+
+button {
+  border-radius: 3px;
+  border: 1px solid #2f5167;
+  height: auto;
+  font-weight: bold;  
+  color:#222222	 ;
+  padding: 3px;
+  margin: 2px;
+
+}
+
+input {
+  margin: 0;  /* inputタグの上下の余白をリセット */
+  padding: 5px;  /* 必要に応じて調整 */
+}
+
+/*title関連*/
+.title {
+  background-color: #2f5167;
+  height: 94px;
+  color:aliceblue;
+}
+
+.title h1{
+  padding-top: 5px;
+  padding-left:10px;
+  padding-bottom: 0%;
+}
+
+.titlespan {
+  color:yellow;
+}
+
+.title p{
+  margin-top: 0px;
+  padding-top: 0%;
+  padding-bottom: 10px;
+  padding-left:15px;
+}
+
+/*タスク作成ボタン関連*/
+.createtask{
+    margin-top:20px;
+    margin-left:30px;
+    height:60px;
+}
+
+.createtask button {
+  background-color: cornflowerblue;
+  font-size: 30px;
+  height: auto;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.createtask button:hover {
+  background-color:darkblue;
+  color:#fff;
+}
+
+/*下段のタスク*/
+.lower-task{
+  display: flex; 
+  align-items: stretch; /* 高さを自動で揃える */
+}
+
+.not-do-tasks, .finishedtask {
+  flex-grow: 1; /* 幅の自動調整で要素が均等に広がる */
+  min-height: 200px; /* 最小高さの指定 */
+}
+
+/*着手中の6つのタスク*/
+.incompletetask {
+  min-height: 300px;
+  width: 97%;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin:8px;
+  border-radius: 9px;
+  background-color:palegoldenrod;
+  color:saddlebrown;
+}
+
+.incompletetask  li{
+  background-color: gold;
+
+}
+
+.task-warning{
+  color:#fff;
+  background-color: red;
+  display: inline-block;
+  font-size: 25px;
+
+}
+
+/*今日やらないタスク*/
+.not-do-tasks{
+  min-height: 200px;
+  width:60%;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin:8px;
+  border-radius: 9px;
+  background-color:rgb(157, 250, 161);
+  color:saddlebrown;
+ 
+}
+
+.not-do-tasks  li{
+  background-color:#00DD00	;
+
+}
+
+
+/*完了済みタスク*/
+.finishedtask{
+  min-height: 200px;
+  width:34%;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin:8px;
+  border-radius: 9px;
+  background-color:lightgrey;
+
+}
+
+.finishedtask li{
+  background-color: gray;
+}
+
+.button-group-main{
+  display: flex;
+  padding: 2px;
+}
+
+.comp-button {
+  background-color:#ff8c00 !important;
+  
+}
+
+.comp-button:hover {
+  background-color: #FF4F02 !important;
+  color: #fff;
+}
+
+.detail-button {
+  background-color: #C0C0C0 !important;
+  
+}
+.detail-button:hover {
+  background-color: #808080 !important;
+  color: #fff;
+}
+
+.dotoday-button {
+  background-color: #00AA00	!important;
+}
+
+.dotoday-button:hover {
+  background-color: #004400	!important;
+  color: #fff;
+}
+
+.dotoday-button:disabled {
+  background-color: #ccc !important; /* 無効時の背景色 */
+  color: #666; /* 無効時の文字色 */
+  cursor: not-allowed; /* カーソルを変更 */
+}
+
+.restore-button-today {
+  background-color: #ff8c00	!important;
+}
+
+.restore-button-today:hover {
+  background-color: #FF4F02	!important;
+  color: #fff;
+}
+.restore-button-today:disabled {
+  background-color: #ccc !important; /* 無効時の背景色 */
+  color: #666; /* 無効時の文字色 */
+  cursor: not-allowed; /* カーソルを変更 */
+}
+
+
+.restore-button-nottoday {
+  background-color: #00AA00	!important;
+}
+
+.restore-button-nottoday:hover {
+  background-color: #004400	!important;
+  color: #fff;
+}
+
+.task-title{
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.task-title-text{
+  font-size: 25px;
+}
+
+/*フッター一応作ったがいつ実装すんだ*/
+footer {
+  font-size: 30px;
+}
+
