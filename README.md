@@ -76,14 +76,11 @@
 
 ### 2.1 全体構成図
   - 全体アーキテクチャ構成図
-※現時点では構想のみ
-　MSの公式サイトから抜粋したものを仮掲載
-![image](https://github.com/user-attachments/assets/c9070b4c-79ee-4428-b877-44742b70d306)
-
+※作成中
     
   - クラスター構成図
 
-![diagram](https://github.com/user-attachments/assets/e030be69-e3cb-478f-9a26-688acee5aab5)
+[クラスター構成図](./diagram/cluster_diagram.png)
 
 
 
