@@ -80,7 +80,7 @@
     
   - クラスター構成図
 
-[クラスター構成図](./diagram/cluster_diagram.png)
+![クラスター構成図](./diagram/cluster_diagram.png)
 
 
 
