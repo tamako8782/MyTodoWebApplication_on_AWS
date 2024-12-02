@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: tamakoapp
+  name: migrate-job
+spec:
+  template:
+    spec:
+
+      initContainers:
+      - name: wait-for-db
+        image: busybox
+        command: ['sh', '-c', 'until nslookup tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com; do echo waiting for db; sleep 5; done;sleep 10']
+      serviceAccountName: secrets-access
+      containers:
+      - name: db-migrate
+        image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:db-migrate-prodv6
+        env:
+        - name: MYSQL_HOST
+          value: tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret
+              key: db_username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret
+              key: db_password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret
+              key: db_name
+        - name: MIGRATIONS_DIR
+          value: "/migrations"
+        volumeMounts: # Secretをボリュームとしてマウント
+        - name: secret-volume
+          mountPath: "/mnt/secrets"
+          
+      restartPolicy: OnFailure
+      volumes:
+      - name: secret-volume
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+              secretProviderClass: "tamakoapp-aws-secrets"

@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: tamakoapp
+  name: ingress-yamatodo
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+### とりあえず最初のデプロイ時はhttpのみで
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]' # HTTPS を削除し、HTTP のみ
+### https使い時にALN変えて有効化
+#    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
+#    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-1:296062576098:certificate/d8a67083-42a4-4321-ab27-9d5a8ffb07c6
+spec:
+  ingressClassName: alb
+  rules:
+    - host: beacon8782.net
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: service-yamatodofront
+              port:
+                number: 80

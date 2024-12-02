@@ -1,0 +1,94 @@
+name: Backend Build, Test, and Deploy
+
+on:
+  pull_request:
+    paths:
+      - 'backend/**'
+    paths-ignore:                 # 除外するパスを指定
+      - 'backend/dbvol/**'        # dbvol以下の変更を無視する
+    branches:
+      - master  # masterブランチへのPull Request時のみ実行
+
+jobs:
+  UnitTest:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend/src
+    services:
+      mysql:
+        image: mysql:8.0 # RDSのバージョンに合わせる
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}      
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+
+      - name: Wait for MySQL to be ready
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" --silent; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 1
+          done
+
+      - name: Run Go test
+        run: go test -v ./repositories
+        env:
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_HOST: "localhost"
+
+# Step 2: Docker Build and Push
+  build-and-push:
+    needs: UnitTest
+    if: github.event.pull_request.merged == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build and push Docker image
+        run: |
+          docker build -f ./backend/Dockerfile_for_cloud -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/back-prodv2:latest ./backend
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/back-prodv2:latest              
+
+  # Step 3: Kubernetes Deployment
+  deploy-to-eks:
+    needs: build-and-push
+    if: github.event.pull_request.merged == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Kubectl tool installer
+        uses: Azure/setup-kubectl@v3
+      - name: Configure AWS Credentials For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Update KUBECONFIG
+        run: aws eks update-kubeconfig --name ${{ vars.cluster_name }}
+
+      - name: Update Kubernetes deployment
+        run: |
+          kubectl set image deployment/yamatodo-back \
+          back-app=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/backend:latest
+      - name: Check rollout status
+        run: |
+          kubectl rollout status deployment/yamatodo-back

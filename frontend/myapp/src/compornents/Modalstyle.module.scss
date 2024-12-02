@@ -1,0 +1,242 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalcontent {
+  background: #fff;
+  padding: 20px;
+  margin: 0;
+  border-radius: 8px;
+  width: 40%;
+  max-width: 600px;
+  max-height: 100%; 
+  overflow-y: auto;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+  font-size: 30px;
+}
+
+.modalcontent h2 {
+  font-size: 55px;
+  border-bottom: 1px solid #2f5167;
+  padding: 0 10px;
+  margin: 0;
+}
+
+.modalcontent p {
+  font-size: 40px;
+  padding: 0 10px;
+  margin: 0;
+}
+
+.detailtasks li {
+  border: none;
+  background-color: transparent;
+  padding: 10px 0;
+}
+
+.detailtasks p {
+  border: 1px solid darkslategrey;
+  padding: 10px;
+  font-size: 16px;
+  margin: 5px 0;
+  font-size: 35px;
+}
+
+.tasktitle,
+.taskcontent,
+.taskstate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  margin: 0 0 15px;
+}
+
+.tasktitle input,
+.taskcontent textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 35px;
+  white-space: pre-wrap;
+}
+
+.taskstate select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 35px;
+}
+
+.submitbutton,
+.cancelbutton,
+.deletebutton,
+.editbutton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 50px;
+  cursor: pointer;
+}
+
+.submitbutton {
+  background-color: #5bc0de;
+  color: #fff !important;
+  font-size: 50px;
+}
+
+.submitbutton:hover {
+  background-color:darkblue;
+  color: #fff;
+}
+
+.submitbutton:disabled {
+  background-color:#929292;
+  color: #fff;
+}
+
+.cancelbutton {
+  background-color: #d9534f !important; 
+  color: #fff !important;
+  font-size: 50px;
+}
+
+.cancelbutton:hover {
+  background-color: #800000 !important;
+  color: #fff;
+}
+
+.deletebutton  {
+  background-color: #444444	 !important;
+  color: #fff;
+}
+
+.deletebutton:hover {
+  background-color: #202020	 !important;
+  color: #fff;
+}
+
+.editbutton {
+  background-color: #00c600	 !important;
+  color: #fff;
+}
+
+.editbutton:hover {
+  background-color: #008100	 !important;
+  color: #fff;
+}
+
+.deleteOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+
+.deleteModalContent {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.deleteModalContent h2 {
+  font-size: 50px;
+}
+
+.deleteModalContent p {
+  font-size: 25px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 10px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.yesButton, .noButton {
+  width: 100px;
+  padding: 5px 0px;
+  border: none;
+  border-radius: 4px;
+  text-align: center;
+  height: auto !important;
+  cursor: pointer;
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.yesButton {
+  background-color: #5bc0de;
+  color: #fff;
+}
+
+.noButton {
+  background-color: #d9534f;
+  color: #fff;
+}
+
+.yesButton:hover {
+  background-color: #31b0d5;
+}
+
+.noButton:hover {
+  background-color: #c9302c;
+}
+
+@media (max-width: 670px) {
+  .modalcontent {
+    background: #fff;
+    padding: 20px;
+    margin: 0;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 100%; 
+    overflow-y: auto;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+    font-size: 30px;
+  }
+  
+  .submitbutton {
+    background-color: #5bc0de;
+    font-size: 50px;
+  }
+  
+  .cancelbutton {
+    background-color: #d9534f !important; 
+    font-size: 50px;
+  }
+  
+  .yesButton {
+    background-color: #5bc0de;
+    color: #fff;
+  }
+  
+  .noButton {
+    background-color: #d9534f;
+    color: #fff;
+  }
+}

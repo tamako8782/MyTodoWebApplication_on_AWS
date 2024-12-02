@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: tamakoapp
+  name: yamatodo-db
+  labels:
+    app: yamatodo-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yamatodo-db
+  template:
+    metadata:
+      labels:
+        app: yamatodo-db
+    spec:
+      serviceAccountName: secrets-access  # IAMロールと紐づけたServiceAccount名
+      containers:
+      - name: yama-db
+        image: mysql:8.2.0  
+        ports:
+        - containerPort: 3306  
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - mysqladmin ping -h 127.0.0.1
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret  # Kubernetes Secretの名前
+              key: db_password        # Secrets Managerで定義したキー
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret
+              key: db_username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret
+              key: db_password
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret
+              key: db_name
+        - name: MYSQL_HOST
+          value: "yama-db"
+        - name: TZ
+          value: "Asia/Tokyo"
+
+        resources:
+          limits:
+            memory: "1Gi" 
+            cpu: "1000m"
+        volumeMounts: # Secretをボリュームとしてマウント
+        - name: secret-volume
+          mountPath: "/mnt/secrets" # マウント先のパス
+          readOnly: true
+      volumes:
+      - name: secret-volume
+        secret:
+          secretName: tamako-db-secret # マウントするSecretの名前

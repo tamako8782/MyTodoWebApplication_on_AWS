@@ -1,0 +1,33 @@
+name: Kubernetes Manifest Validation
+
+on:
+  push:
+    paths:
+      - 'k8s/manifest_2/**'  # k8s/manifest_2配下の変更時にトリガー
+  pull_request:
+    paths:
+      - 'k8s/manifest_2/**'  # PR時にもトリガー
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. リポジトリのコードをチェックアウト
+    - uses: actions/checkout@v3
+
+    # 2. kubeconform と kustomize をセットアップ
+    - uses: yokawasa/action-setup-kube-tools@v0.9.2
+      with:
+        setup-tools: |
+          kubeconform
+          kustomize
+        kubeconform: '0.5.0'
+        kustomize: '5.0.0'
+
+    # 3. basesディレクトリのバリデーション
+    - run: |
+        kustomize build k8s/manifest_2/bases | kubeconform -summary \
+        -schema-location default \
+        -schema-location "schemas/{{ .ResourceKind }}_{{ .ResourceAPIVersion }}.json" \
+        -output json

@@ -1,0 +1,39 @@
+# 続き。こいつら相互に依存関係あるから全部一緒にデプロイする
+# 多分環境変数を手当してやれば行ける。はず。
+
+## front
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yamatodo
+  namespace: tamakoapp
+  labels:
+    app: yamatodofront
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yamatodofront
+  template:
+    metadata:
+      labels:
+        app: yamatodofront
+    spec:
+      initContainers:
+      - name: wait-for-backend
+        image: busybox
+        command: ['sh', '-c', 'until nslookup back-service.tamakoapp.svc.cluster.local; do echo waiting for frontend; sleep 5; done;sleep 10'] #nslookupが成功して名前解決できた後、さらに10秒間待機
+      containers:
+        - name: front-app
+          image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:front-prodv3
+          # ここはECRに変更
+          imagePullPolicy: Always 
+          resources:
+            limits:
+              memory: "512Mi"  
+              cpu: "500m"
+          ports:
+          - containerPort: 80
+
+

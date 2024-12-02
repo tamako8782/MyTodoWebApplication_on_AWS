@@ -1,0 +1,8 @@
+resources:
+  - back_dep.yml
+  - db_dep.yml
+  - migrate_dep.yml
+  - front_dep.yml
+  - ingress.yml
+  - service.yml
+  - SecretfromEnv.yml

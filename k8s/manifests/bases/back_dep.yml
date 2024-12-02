@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yamatodo-back
+  namespace: tamakoapp
+  labels:
+    app: yamatodo-back
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yamatodo-back
+  template:
+    metadata:
+      labels:
+        app: yamatodo-back
+    spec:
+
+      initContainers:
+      - name: wait-for-db
+        image: busybox
+        command: ['sh', '-c', 'until nslookup tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com; do echo waiting for db; sleep 5; done;sleep 10']
+      serviceAccountName: secrets-access  # SecretsにアクセスするIAMロールに紐づけたServiceAccount
+      containers:
+      - name: back-app
+        image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:back-prodv2
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+        env: # Kubernetes Secret から環境変数を読み込む
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret
+              key: db_name
+        - name: MYSQL_HOST
+          value: tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret
+              key: db_username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: tamako-db-secret
+              key: db_password
+        - name: MYSQL_PORT
+          value: "3306"
+        volumeMounts: # Secretをボリュームとしてマウント
+        - name: secret-volume
+          mountPath: "/mnt/secrets" # マウント先のパス
+      volumes:
+      - name: secret-volume
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+              secretProviderClass: "tamakoapp-aws-secrets"
+        

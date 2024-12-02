@@ -1,0 +1,288 @@
+# ==========================
+# dbvol 配下のファイルをすべて除外
+# ==========================
+# MySQLデータベースの実データファイルを保存しているdbvol/data/db配下のファイルをすべて無視
+db/*
+
+
+# ==========================
+# MySQL 関連
+# ==========================
+# MySQLコンパイル時に生成される一時ファイルやオブジェクトファイルを無視
+*~
+*.a
+*.la
+*.lo
+*.o
+*.so
+
+# InnoDB のダブルライトバッファやログファイルを無視
+*ib_doublewrite
+*ib_logfile0
+*ib_logfile1
+*ibdata1
+
+# MySQL SSL証明書ファイルを無視
+*.pem
+
+# CMake関連のファイルを無視
+*.cmake
+!/cmake/*.cmake
+*CMakeFiles/
+CMakeCache.txt
+Makefile
+
+# Eclipseプロジェクト関連ファイルを無視
+.cproject
+.deps
+.metadata
+.project
+.settings
+.*.swp
+
+# MySQLのドキュメントやテストデータを無視
+Docs/INFO_BIN
+Testing/
+VERSION.dep
+
+# MySQLクライアント関連ファイルを無視
+client/async_example
+client/decimal.c
+client/link_sources
+client/log_event.cc
+client/log_event.h
+client/log_event_old.cc
+client/log_event_old.h
+client/my_decimal.cc
+client/my_decimal.h
+client/my_user.c
+client/mysql
+client/mysql_plugin
+client/mysql_priv.h
+client/mysql_upgrade
+client/mysqladmin
+client/mysqlbinlog
+client/mysqlcheck
+client/mysqldump
+client/mysqlimport
+client/mysqlshow
+client/mysqlslap
+client/mysqltest
+client/rpl_constants.h
+client/rpl_record_old.cc
+client/rpl_record_old.h
+client/rpl_tblmap.cc
+client/rpl_tblmap.h
+client/rpl_utility.h
+
+# コンパイル設定やステータス関連ファイルを無視
+config.guess
+config.log
+config.status
+config.sub
+configure
+
+# デバッグ関連ファイルを無視
+dbug/dbug_analyze
+dbug/dbug-t
+dbug/example1.r
+dbug/example2.r
+dbug/example3.r
+dbug/factorial
+dbug/factorial.r
+dbug/main.r
+dbug/output1.r
+dbug/output2.r
+dbug/output3.r
+dbug/output4.r
+dbug/output5.r
+dbug/tests
+dbug/user.ps
+dbug/user.t
+
+# MySQL関連のスクリプトや実行ファイルを無視
+extra/charset2html
+extra/comp_err
+extra/innochecksum
+extra/my_print_defaults
+extra/mysql_waitpid
+extra/perror
+extra/replace
+extra/resolve_stack_dump
+extra/resolveip
+
+# MySQLヘッダファイルや設定ファイルを無視
+include/sql_state.h.tmp
+include/config.h
+include/config.h.in
+include/link_sources
+include/my_config.h
+include/mysql_version.h
+include/mysqld_ername.h
+include/mysqld_ername.h.tmp
+include/mysqld_error.h
+include/mysqld_error.h.tmp
+include/readline
+include/sql_state.h
+include/stamp-h1
+
+# インストールシェルスクリプトを無視
+install-sh
+
+# インスタンスやログファイルを無視
+instance
+log
+log.tests
+
+# libmysql関連のファイルを無視
+libmysql/libmysql_exports_file.cc
+libmysql/libmysql_versions.ld
+libmysql/libmysqlclient.so.18
+libmysql/libmysqlclient.so.18.0.0
+libmysql/libmysqlclient_r.so.18
+libmysql/libmysqlclient_r.so.18.0.0
+libmysql/mysqlclient_depends.c
+
+# embedded MySQLクライアントのテストファイルを無視
+libmysqld/examples/mysql_client_test_embedded
+libmysqld/examples/mysql_embedded
+libmysqld/examples/mysqltest_embedded
+libmysqld/libmysqld.so.18
+libmysqld/libmysqld_exports_file.cc
+libmysqld/mysqlserver_depends.c
+
+# MySQLのテストファイルを無視
+mysql-test/collections/default.release
+mysql-test/collections/default.release.done
+mysql-test/lib/My/SafeProcess/my_safe_process
+mysql-test/mtr
+mysql-test/mysql-test-run
+mysql-test/var
+
+# MySQL内部システムで使用するロックファイルを無視
+mysys/thr_lock
+
+# PCRE (Perl Compatible Regular Expressions)関連ファイルを無視
+pcre/CTestCustom.ctest
+pcre/config.h
+pcre/pcre.h
+pcre/pcre_chartables.c
+pcre/pcre_grep_test.sh
+pcre/pcre_test.sh
+pcre/pcregrep
+pcre/pcretest
+
+# plugin関連ファイルを無視
+plugin/fulltext/.libs/
+
+# スクリプトやビルド関連ファイルを無視
+scripts/comp_sql
+scripts/make_binary_distribution
+scripts/make_sharedlib_distribution
+scripts/msql2mysql
+scripts/mysql_config
+scripts/mysql_config.pl
+scripts/mysql_convert_table_format
+scripts/mysql_find_rows
+scripts/mysql_fix_extensions
+scripts/mysql_fix_privilege_tables
+scripts/mysql_fix_privilege_tables.sql
+scripts/mysql_fix_privilege_tables_sql.c
+scripts/mysql_install_db
+scripts/mysql_secure_installation
+scripts/mysql_setpermission
+scripts/mysql_zap
+scripts/mysqlaccess
+scripts/mysqlbug
+scripts/mysqld_multi
+scripts/mysqld_safe
+scripts/mysqldumpslow
+scripts/mysqlhotcopy
+scripts/mytop
+
+# SQLベンチマークテスト用のファイルを無視
+sql-bench/bench-count-distinct
+sql-bench/bench-init.pl
+sql-bench/compare-results
+sql-bench/copy-db
+sql-bench/crash-me
+sql-bench/graph-compare-results
+sql-bench/innotest1
+sql-bench/innotest1a
+sql-bench/innotest1b
+sql-bench/innotest2
+sql-bench/innotest2a
+sql-bench/innotest2b
+sql-bench/run-all-tests
+sql-bench/server-cfg
+sql-bench/test-ATIS
+sql-bench/test-alter-table
+sql-bench/test-big-tables
+sql-bench/test-connect
+sql-bench/test-create
+sql-bench/test-insert
+sql-bench/test-select
+sql-bench/test-table-elimination
+sql-bench/test-transactions
+sql-bench/test-wisconsin
+
+# SQL関連ファイルを無視
+sql/.libs/
+sql/client.c
+sql/db.opt
+sql/gen_lex_hash
+sql/lex_hash.h
+sql/link_sources
+sql/mini_client_errors.c
+sql/my_time.c
+sql/my_user.c
+sql/mysql_tzinfo_to_sql
+sql/mysqld
+sql/pack.c
+
+# MySQLデータベースの言語ファイルを無視
+sql/share/*
+
+# MySQLデータベースファイルを無視（データベースの実ファイル）
+/var/lib/mysql/
+*.ibd
+*.frm
+*.MYD
+*.MYI
+
+# MySQLログファイルを無視
+*.log
+mysql-bin.*
+mysql-slow.log
+
+# MySQLバイナリログファイルを無視
+binlog.*
+
+# MySQLの一時ファイルやソケットファイルを無視
+*.pid
+*.sock
+
+# SQLダンプファイルを無視
+*.sql
+*.sql.gz
+*.dump
+
+# Dockerで使用されるMySQLデータを無視
+docker/mysql-data/
+docker/mysql-logs/
+
+# MySQLの設定ファイルを無視
+my.cnf
+auto.cnf
+
+# InnoDB関連のバッファプールや一時ファイルを無視
+ib_buffer_pool
+*ib_*
+*innodb_temp/*
+*innodb_redo/*
+
+# MySQLのアンドゥログファイルを無視
+undo_*
+
+# MySQLの一時テーブルスペースを無視
+ibtmp1

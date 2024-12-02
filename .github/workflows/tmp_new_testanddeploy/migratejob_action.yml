@@ -1,0 +1,40 @@
+name: Migrate Job Deployment
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'backend/dbvol/migrate/**'
+
+  workflow_dispatch: # 手動実行にも対応
+
+jobs:
+  migrate-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install kubectl
+        uses: Azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }}
+
+      - name: Replace and apply Migrate Job
+        run: |
+          kubectl replace -f ./k8s/manifests/bases/migrate_dep.yml || \
+          kubectl apply -f ./k8s/manifests/bases/migrate_dep.yml
+#replaceリソースが存在しない場合にエラーになる。そうなった場合の予防策としてapplyを実行する手立て

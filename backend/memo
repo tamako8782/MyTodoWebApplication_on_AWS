@@ -1,0 +1,20 @@
+mysql -h yama-db -u app --password=admin1234! yamamysql < /app/src/repositories/setupDB.sql
+mysql -h yama-db -u app --password=admin1234! yamamysql < /app/src/repositories/cleanupDB.sql
+
+curl http://localhost:8080/task -X GET
+
+curl http://localhost:8080/task/1 -X GET
+curl http://localhost:8080/task/1/update -X PATCH
+curl http://localhost:8080/task/create -X POST -d '{"title":"c","content":"d","state":"NotDoTask"}'
+
+curl http://localhost:8080/task/4/update -X PATCH -d '{"title":"update complete???","content":"konniciwa","state":"InComplete"}' -i
+curl http://localhost:8080/task/4 -X GET
+
+
+- シャンプー
+- 運動
+- 食事
+- 睡眠
+- 外服薬
+- サプリ
+- その他悪習慣、両習慣
