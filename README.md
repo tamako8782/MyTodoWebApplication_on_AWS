@@ -83,7 +83,7 @@
 
 ### 2.1 全体構成図
   - 全体アーキテクチャ構成図
-![EKS構成図](./diagram/eks_image.png)
+※作成中
     
   - クラスター構成図
 
@@ -102,9 +102,7 @@
 - **コンテナオーケストレーション(クラスター)**: Kubernetes cluster 1.30.0
 - **コンテナオーケストレーション(クライアント)**: Kubernetes Kubectl 1.30.2
 - **コンテナオーケストレーション(kubernetesマニフェスト管理)**: kustomize 5.4.3
-- **コンテナオーケストレーション(パッケージ管理)**: Helm 3.16.3
-- **クラウドプロバイダー**: AWS
-- **IaC**: Terraform 1.9.8
+- **クラウドプロバイダー**: Azure (将来的に検討)
 
 ## 3. 詳細設計
 
@@ -150,8 +148,7 @@
 ### 3.2 データ層
 
 #### 3.2.1 データベース
-- **使用DB**: MySQL 8.0.2
-- **デプロイメント**: AWS RDS 
+- **使用DB**: MySQL 8.2.0
 - **データベース構造**: タスク管理用のテーブルを設計。
   - **テーブル名**: task
     - **カラム一覧**:
@@ -167,81 +164,52 @@
 ### 3.3 インフラ層
 
 #### 3.3.1 クラウドインフラ
-- **クラウドプロバイダー**: AWS
+- **クラウドプロバイダー**: Azure（予定）
 - **主要サービス**: 
-  - AWS Elastic Kubernetes Service (EKS)
-  - AWS RDS
-  - AWS ECR
-  - AWS ALB
-  - AWS Route53
-  - AWS ACM
-  - AWS Secrets Manager
-  - AWS S3
-  - AWS dynamoDB
-  - AWS VPC
+  - Azure Kubernetes Service (AKS) (予定)
+  - Azure Database for MySQL（予定）
+  - Azure DNS
+  - Azure Application Gateway
+  - Azure Front Door
+  - Azure Virtual Network (VNet)
+  - Azure Key Vault
+  - Azure Blob Storage
 
 #### 3.3.2 ネットワーク設計
-- **VPC設計**: 
-  - 1つのVPCを作成
-  - 2つのAZにまたがる形で
-    - パブリックサブネット2つ(外部からのアクセスを担うALB及び、NATgatewayの配置場所)
-    - EKS用プライベートサブネット2つ(EKSNodeGroupの配置場所)
-    - DB用プライベートサブネット2つ(RDSの配置場所)
+- **VNet設計**: 未定。
 
-### 3.3.3 ロギングとモニタリング
-- **設定**: Cloudwatch及びKubernetesのPrometheus、datadog(無料試用版)をそれぞれ
-  適用しオブザーバビリティや精密なロギング等コストや運用保守観点のオペレーションのしやすさを
-  評価する(予定)
+### 3.4 CI/CDパイプライン
 
-### 3.3.4 IaC
+#### 3.4.1 GitHub Actions
+- **概要**: コードのビルド、テスト、デプロイを自動化するGitHub Actionsのワークフローが設定済み。
+- **ワークフロー(現在)**: `go-test.yml`, `kubernetes-test.yml`, `react-test.yml`。
+- **今後の追加予定**:
+  - **Terraform Apply**: インフラストラクチャの管理を自動化するためのTerraformCloudを用いたワークフローを追加予定。
+    - **ワークフロー名**: `Terraform Apply`
+    - **トリガー**: `master`ブランチへのプッシュ
+    - **ジョブ**: 
+      - **名前**: "Terraform Apply"
+      - **実行環境**: `ubuntu-latest`
+      - **ステップ**:
+        - コードのチェックアウト
+        - Terraform設定のアップロード
+        - Apply Runの作成
+        - Applyの実行
+  - **Terraform Plan**: プルリクエスト時にTerraformのプランを実行し、結果をPRにコメントするワークフローを追加予定。
+    - **ワークフロー名**: `Terraform Plan`
+    - **トリガー**: プルリクエスト
+    - **ジョブ**:
+      - **名前**: "Terraform Plan"
+      - **実行環境**: `ubuntu-latest`
+      - **ステップ**:
+        - コードのチェックアウト
+        - Terraform設定のアップロード（スペキュレーティブモード）
+        - Plan Runの作成
+        - Planの出力を取得
+        - PRにPlanの結果をコメント
 
-- **設定**: Terraformを使用してインフラストラクチャの管理を自動化する
-- **実装方針**: 
-  - 環境変数や秘密情報の管理にはvariableブロックを用いて
-  あらかじめ作成済みの環境変数登録スクリプトを用いてローカル及びgithubactionsへの環境変数登録を実施する。
-  - tfstateファイルの管理にはS3バケットを用いたリモートバックエンドでのtfstateファイルの管理を実施する。
-  - tfstateの競合を防ぐためにbackendブロックを用いたロックメカニズムをaws dynamodbを用いて実施する。
-  - ディレクトリ構造は以下の通りとする
-
-```
-.
-├── infra-cfn-dns
-│   ├── dns.tf
-│   ├── main.tf
-│   ├── output.tf
-│   └── variables.tf
-├── infra-rds-eks
-│   ├── alb-ingress-policy.json
-│   ├── database.tf
-│   ├── ecr.tf
-│   ├── eks.tf
-│   ├── iam.tf
-│   ├── main.tf
-│   ├── natgw.tf
-│   ├── network.tf
-│   ├── output.tf
-│   ├── secrets.tf
-│   ├── tamakoapp.json
-│   └── variables.tf
-├── tfstate_manage
-│   ├── main.tf
-│   ├── output.tf
-│   ├── resource.tf
-│   └── variables.tf
-└── vars_and_secrets
-    ├── ghcli_regist_sec.sh
-    ├── ghcli_regist_var.sh
-    ├── local_regist_sec.sh
-    ├── local_regist_var.sh
-    ├── secrets.yml
-    └── var.yml
-```
-
-  - ディレクトリ用途説明
-    - `infra-cfn-dns`: ドメイン名を管理するためのroute53及びACMの設定を行うディレクトリ
-    - `infra-rds-eks`: 主要部分であるRDSとEKSの設定を行うディレクトリ
-    - `tfstate_manage`: tfstateファイルの管理を行うリソースの管理を行うディレクトリ
-    - `vars_and_secrets`: 環境変数や秘密情報の管理を行うスクリプトを配置するディレクトリ
+### 3.5 ロギングとモニタリング
+- **設定**: Azure Log AnalyticsやAzure Monitorを使用する予定（将来的に追加）。
 
 ## 4. セキュリティ設計
 
@@ -254,7 +222,7 @@
 ## 5. デプロイメントガイド
 
 ### 5.1 開発環境セットアップ
-- **必要ツール**: Docker、Docker Compose、kubectl,kindを使用。
+- **必要ツール**: Docker、Docker Compose、kubectlを使用。
 - **開発環境**:
   - **MyPC**: 
     - OS: 14.6.1（23G93）
@@ -265,22 +233,15 @@
   - **Kind**: 
     - バージョン: kind 0.23.0
 
-### 5.2 本番環境デプロイ(予定)
-- **CI/CDパイプライン**
-
-GitHub Actionsを使用してAWSEKS環境へのデプロイを実施する
-
-  - **go test&build&deploy**: バックエンドのテスト及びコンテナイメージのビルド、EKSへのデプロイを担うワークフローを追加予定
-  - **react test&build&deploy**: フロントエンドのテスト及びコンテナイメージのビルド、EKSへのデプロイを担うワークフローを追加予定
-  - **Terraform Apply**: インフラストラクチャの管理を自動化するためのTerraformCloudを用いたワークフローを追加予定。
-  - **Terraform Plan**: プルリクエスト時にTerraformのプランを実行し、結果をPRにコメントするワークフローを追加予定。
-
+### 5.2 本番環境デプロイ
+- **CI/CDパイプライン**: GitHub Actionsによる自動化デプロイを設定予定。
 
 ## 6. テスト計画
 
 ### 6.1 ユニットテスト
-- **概要**: GoおよびReactのコンポーネント対するユニットテストを予定。
+- **概要**: GoおよびReactのコンポーネント対するユニットテスト、 Kubernetesの構文チェックが含まれています。
 
 ### 6.2 インテグレーションテスト
 - **概要**: APIを含む各サービス間のテストを予定。
+
 

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-service
+spec:
+  selector:
+    app: yamatodofront
+  ports:
+    - protocol: TCP
+      port: 80  
+      targetPort: 80  
+  type: ClusterIP 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: back-service
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: yamatodo-back
+  type: ClusterIP
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: yama-db
+spec:
+  ports:
+  - port: 3306
+    targetPort: 3306
+  selector:
+    app: yamatodo-db
+  type: ClusterIP

@@ -1,0 +1,7 @@
+resources:
+  - back_deploy.yml
+  - db_deploy.yml
+  - db_migrate.yml
+  - front_deploy.yml
+  - ingress.yml
+  - services.yml

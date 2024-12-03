@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yamatodo-db
+  labels:
+    app: yamatodo-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yamatodo-db
+  template:
+    metadata:
+      labels:
+        app: yamatodo-db
+    spec:
+      containers:
+      - name: yama-db
+        image: mysql:8.2.0  
+        ports:
+        - containerPort: 3306  
+        volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql  
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - mysqladmin ping -h 127.0.0.1
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: yama-secret
+              key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: yama-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: yama-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: yama-secret
+              key: MYSQL_DATABASE
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: yama-secret
+              key: MYSQL_HOST
+        - name: TZ
+          value: "Asia/Tokyo"
+
+        resources:
+          limits:
+            memory: "1Gi" 
+            cpu: "1000m"
+
+      volumes:
+      - name: mysql-storage
+        persistentVolumeClaim:
+          claimName: mysql-pvc
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 1Gi 
+     # Retainの場合、PVCが削除されてもPVは削除されない
+     # Deleteの場合、PVCが削除されるとPVも削除される
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: ./dbvol/data/db  
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  
+
+
+
