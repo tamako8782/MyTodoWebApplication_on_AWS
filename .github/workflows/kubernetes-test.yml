@@ -3,21 +3,12 @@ name: Kubernetes Manifest Validation
 on:
   push:
     paths:
-<<<<<<< HEAD
       - 'k8s/**'  # k8s/manifest_2配下の変更時にトリガー
   pull_request:
     paths:
       - 'k8s/**'  # PR時にもトリガー
 
 jobs: 
-=======
-      - 'k8s/manifest_2/**'  # k8s/manifest_2配下の変更時にトリガー
-  pull_request:
-    paths:
-      - 'k8s/manifest_2/**'  # PR時にもトリガー
-
-jobs:
->>>>>>> origin/master
   validate:
     runs-on: ubuntu-latest
 
@@ -36,12 +27,7 @@ jobs:
 
     # 3. basesディレクトリのバリデーション
     - run: |
-        kustomize build k8s/manifest_2/bases | kubeconform -summary \
+        kustomize build k8s/manifests/bases | kubeconform -summary \
         -schema-location default \
         -schema-location "schemas/{{ .ResourceKind }}_{{ .ResourceAPIVersion }}.json" \
         -output json
-<<<<<<< HEAD
-
-
-=======
->>>>>>> origin/master
