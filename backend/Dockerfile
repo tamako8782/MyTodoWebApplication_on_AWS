@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 # 開発環境で必要なポートを公開
 EXPOSE 8080
 
-CMD ["tail", "-f", "/dev/null"]
+CMD ["go", "run", "./src/main.go"]
 
 
 #### Stage 2 ビルドステージ
