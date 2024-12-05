@@ -52,7 +52,6 @@ services:
       context: ./backend/dbvol/migrate
     depends_on:
         - db
-    command: ["up"]
     environment:
       - "MYSQL_HOST=${MYSQL_HOST}"
       - "WAIT_HOSTS= ${MYSQL_HOST}:3306"
