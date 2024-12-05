@@ -36,7 +36,7 @@ jobs:
 
     # 3. basesディレクトリのバリデーション
     - run: |
-        kustomize build k8s/manifest_2/bases | kubeconform -summary \
+        kustomize build k8s/manifests/bases | kubeconform -summary \
         -schema-location default \
         -schema-location "schemas/{{ .ResourceKind }}_{{ .ResourceAPIVersion }}.json" \
         -output json
