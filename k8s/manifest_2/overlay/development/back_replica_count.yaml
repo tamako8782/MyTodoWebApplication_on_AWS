@@ -1,6 +1,0 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: yamatodo-back
-spec:
-  replicas: 1

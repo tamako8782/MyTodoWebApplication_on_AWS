@@ -137,7 +137,7 @@ export const App = () => {
       <>
         <header>
           <div className='main-title'>
-            <h1>My<span className='titlespan'>Todo</span>Application</h1>
+            <h1>My<span className='titlespan'>Todo</span>WebApplication</h1>
             <p>Optimize your tasks with this todo list!</p>
           </div>
         </header>

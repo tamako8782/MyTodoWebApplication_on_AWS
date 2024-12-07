@@ -1,5 +1,0 @@
-resources:
-  - ../../bases
-
-patchesStrategicMerge:
-  - back_replica_count.yaml

@@ -20,7 +20,7 @@ spec:
       - name: wait-for-db
         image: busybox
         command: ['sh', '-c', 'until nslookup tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com; do echo waiting for db; sleep 5; done;sleep 10']
-      serviceAccountName: secrets-access  # SecretsにアクセスするIAMロールに紐づけたServiceAccount
+      serviceAccountName: secrets-access
       containers:
       - name: back-app
         image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:back-prodv2
@@ -31,7 +31,7 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 8080
-        env: # Kubernetes Secret から環境変数を読み込む
+        env:
         - name: MYSQL_DATABASE
           valueFrom:
             secretKeyRef:
@@ -51,9 +51,9 @@ spec:
               key: db_password
         - name: MYSQL_PORT
           value: "3306"
-        volumeMounts: # Secretをボリュームとしてマウント
+        volumeMounts:
         - name: secret-volume
-          mountPath: "/mnt/secrets" # マウント先のパス
+          mountPath: "/mnt/secrets"
       volumes:
       - name: secret-volume
         csi:
