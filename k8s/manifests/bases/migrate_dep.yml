@@ -35,7 +35,7 @@ spec:
               key: db_name
         - name: MIGRATIONS_DIR
           value: "/migrations"
-        volumeMounts: # Secretをボリュームとしてマウント
+        volumeMounts:
         - name: secret-volume
           mountPath: "/mnt/secrets"
           

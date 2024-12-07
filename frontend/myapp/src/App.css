@@ -164,6 +164,7 @@ input {
 
 .task-warning {
   font-size: 25px;
+  color: #fff;
   background-color: red;
   display: inline-block;
   padding-top: 5px;
