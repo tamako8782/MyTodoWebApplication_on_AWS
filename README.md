@@ -184,25 +184,25 @@
 ### 2.1.4 アプリケーション画面サンプル
 
 - メイン画面
-![メイン画面](./diagram/picture/mainview1.png)
+![メイン画面](./diagram/picture/mainview1_1.png)
 
 - 証明書の確認
-![証明書の確認](./diagram/picture/certcheck.png)
+![証明書の確認](./diagram/picture/certcheck1_1.png)
 
 - タスク作成
-![タスク作成](./diagram/picture/createview1.png)
-![タスク作成](./diagram/picture/createview2.png)
+![タスク作成](./diagram/picture/createview1_1.png)
+![タスク作成](./diagram/picture/createview1_2.png)
 - タスク詳細画面
-![タスク詳細画面](./diagram/picture/detailview1.png)
+![タスク詳細画面](./diagram/picture/detailview1_1.png)
 
 - タスク編集画面
-![タスク編集画面](./diagram/picture/editview1.png)
+![タスク編集画面](./diagram/picture/editview1_1.png)
 
 - タスク削除確認画面
-![タスク削除確認画面](./diagram/picture/deleteview1.png)
+![タスク削除確認画面](./diagram/picture/deleteview1_1.png)
 
 - アラート画面(6タスクへの追加上限)
-![アラート表示](./diagram/picture/6limitalert1.png)
+![アラート表示](./diagram/picture/6limitalert1_1.png)
 
 - 動作検証動画
 <video src="./diagram/movie/MyTodoWebApplication_demo.mov" controls="true"></video>
