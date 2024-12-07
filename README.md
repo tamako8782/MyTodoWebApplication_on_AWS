@@ -205,7 +205,11 @@
 ![アラート表示](./diagram/picture/6limitalert1_1.png)
 
 - 動作検証動画
-<video src="./diagram/movie/MyTodoWebApplication_demo.mov" controls="true"></video>
+
+https://github.com/user-attachments/assets/b3c6c823-2192-4004-96e2-460e05f6ac97
+
+
+
 
 
 ## 3. アーキテクチャ概要
