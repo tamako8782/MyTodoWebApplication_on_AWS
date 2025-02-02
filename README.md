@@ -211,10 +211,6 @@ https://github.com/user-attachments/assets/b3c6c823-2192-4004-96e2-460e05f6ac97
   - 全体アーキテクチャ構成図
 ![EKS構成図](./diagram/Architecture_Diagram.png)
     
-  - クラスター構成図(ローカルのkindで動かす場合)
-
-![クラスター構成図](./diagram/cluster_diagram.png)
-
 
 ### 3.2 主要コンポーネント一覧
 - **Webサーバ**: Nginx 1.27.2
