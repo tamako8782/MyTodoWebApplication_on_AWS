@@ -6,6 +6,7 @@
 - 共同作成者: -
 - github: https://github.com/tamako8782
 - x: https://x.com/tamako8782
+- zenn:https://zenn.dev/tamako8782/articles/30b1bfcee3abbd
 
 ### 0.2 改定履歴
 
