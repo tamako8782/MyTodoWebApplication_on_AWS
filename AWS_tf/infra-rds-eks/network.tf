@@ -5,7 +5,7 @@ resource "aws_vpc" "tamako_vpc" {
   enable_dns_support   = true          # DNSサポートを有効化
   enable_dns_hostnames = true          # ホスト名解決を有効化
   tags = {
-    Name                                        = "${var.base_name}-vpc" # リソースの識別用タグ
+    Name = "${var.base_name}-vpc" # リソースの識別用タグ
   }
 }
 
@@ -14,7 +14,7 @@ resource "aws_vpc" "tamako_vpc" {
 resource "aws_internet_gateway" "tamako_igw" {
   vpc_id = aws_vpc.tamako_vpc.id
   tags = {
-    Name = "yama-igw"
+    Name = "${var.base_name}-igw"
   }
 }
 
@@ -27,8 +27,8 @@ resource "aws_subnet" "tamako_pubsub1" {
   availability_zone       = "ap-northeast-1a" # アベイラビリティゾーンを指定
   map_public_ip_on_launch = true              # インスタンスにパブリックIPを割り当て
   tags = {
-    "kubernetes.io/role/elb"                    = "1"                         # ELB用サブネットタグ
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared"                    # Kubernetesクラスタの共有タグ
+    "kubernetes.io/role/elb"                    = "1"      # ELB用サブネットタグ
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared" # Kubernetesクラスタの共有タグ
   }
 }
 
@@ -100,7 +100,6 @@ resource "aws_route_table" "tamako_route_table_pub" {
   }
 }
 
-# プライベートサブネット用のルートテーブル
 # プライベートサブネット用のルートテーブルを作成し、内部通信のルーティングを設定します。
 resource "aws_route_table" "tamako_route_table_pri" {
   vpc_id = aws_vpc.tamako_vpc.id

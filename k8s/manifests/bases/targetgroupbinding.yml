@@ -1,0 +1,12 @@
+# base/target-group-binding.yaml
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: tamako-alb-tg-binding
+  namespace: tamakoapp
+spec:
+  serviceRef:
+    name: service-yamatodofront
+    port: 80
+  targetGroupARN: arn:aws:elasticloadbalancing:ap-northeast-1:296062576098:targetgroup/tamako-alb-tg/a542f07fb7907d36
+  targetType: ip

@@ -3,7 +3,7 @@
 ###################github variablesへの登録のために実施###################
 
 # プロジェクトディレクトリ名を設定
-PROJECT_DIR_NAME="MyTodoWebApplication_practice_on_AWS"
+PROJECT_DIR_NAME="MyTodoWebApplication_on_AWS"
 
 # プロジェクトディレクトリの絶対パスを検索
 PROJECT_DIR_PATH=$(find $HOME/Desktop/repo -type d -name "$PROJECT_DIR_NAME" 2>/dev/null | head -n 1)
@@ -21,7 +21,7 @@ fi
 OWNER="tamako8782"
 REPO=$PROJECT_DIR_NAME
 # 読み込み元ファイルを設定
-VARFILE="$PROJECT_HOME/AWS_tf/vars_and_secrets/var.yml"
+VARFILE="$PROJECT_HOME/AWS_tf/vars_and_secrets/vars.yml"
 
 
 ## yqとghがインストールされていることを確認 #########################
@@ -36,18 +36,18 @@ if ! command -v gh &> /dev/null; then
     exit 1
 fi
 
-## var.ymlから変数を読み込む #########################
+## vars.ymlから変数を読み込む #########################
 
 VARIABLES=$(yq eval 'keys | .[]' "$VARFILE")
 
 ## 変数をGitHub Actionsの変数として設定 #########################
 
-for VAR in $VARIABLES; do
-    VALUE=$(yq eval ".$VAR" "$VARFILE")
-    if gh variable set "$VAR" -b "$VALUE" -R "$OWNER/$REPO"; then
-        echo "Variable $VAR has been set."
+for TF_VAR_KEY in $VARIABLES; do
+    VALUE=$(yq eval ".$TF_VAR_KEY" "$VARFILE")
+    if gh variable set "$TF_VAR_KEY" -b "$VALUE" -R "$OWNER/$REPO"; then
+        echo "Variable $TF_VAR_KEY has been set."
     else
-        echo "Failed to set variable $VAR."
+        echo "Failed to set variable $TF_VAR_KEY."
     fi
 done
 
@@ -56,8 +56,8 @@ echo "Variables have been set."
 
 
 ################################################
-## please create "var.yml" in the following format:
+## please create "vars.yml" in the following format:
 # EXAMPLE:
-# VAR1: "value1"
-# VAR2: "value2"
+# TF_VAR_KEY1: "value1"
+# TF_VAR_KEY2: "value2"
 ################################################

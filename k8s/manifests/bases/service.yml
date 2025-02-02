@@ -10,7 +10,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-  type: NodePort
+  type: ClusterIP
 
 
 ---
@@ -43,4 +43,4 @@ spec:
   selector:
     app: yamatodo-db
   type: ExternalName
-  externalName: tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com
+  externalName: tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com # 後で修正検討

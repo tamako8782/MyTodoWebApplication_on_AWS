@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: tamakoapp
+data:
+  MYSQL_HOST: "tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com"
+  ECR_REPOSITORY: "296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main"
+  TARGET_GROUP_ARN: "arn:aws:elasticloadbalancing:ap-northeast-1:296062576098:targetgroup/tamako-alb-tg/c4709fdd10ce8823"

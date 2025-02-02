@@ -4,7 +4,7 @@
 
 
 # プロジェクトディレクトリ名を設定
-PROJECT_DIR_NAME="MyTodoWebApplication_practice_on_AWS"
+PROJECT_DIR_NAME="MyTodoWebApplication_on_AWS"
 
 # プロジェクトディレクトリの絶対パスを検索
 PROJECT_DIR_PATH=$(find $HOME/Desktop/repo -type d -name "$PROJECT_DIR_NAME" 2>/dev/null | head -n 1)
@@ -41,12 +41,12 @@ SECRETS=$(yq eval 'keys | .[]' "$SECFILE")
 
 ## 変数をGitHub Actionsのシークレットとして設定 #########################
 
-for SEC in $SECRETS; do
-    VALUE=$(yq eval ".$SEC" "$SECFILE")
-    if gh secret set "$SEC" -b "$VALUE" -R "$OWNER/$REPO"; then
-        echo "Secret $SEC has been set."
+for TF_VAR_SECRET in $SECRETS; do
+    VALUE=$(yq eval ".$TF_VAR_SECRET" "$SECFILE")
+    if gh secret set "$TF_VAR_SECRET" -b "$VALUE" -R "$OWNER/$REPO"; then
+        echo "Secret $TF_VAR_SECRET has been set."
     else
-        echo "Failed to set secret $SEC."
+        echo "Failed to set secret $TF_VAR_SECRET."
     fi
 done
 
@@ -55,6 +55,6 @@ echo "Secrets have been set."
 ################################################
 ## please create "secrets.yml" in the following format:
 # EXAMPLE:
-# VAR1: "value1"
-# VAR2: "value2"
+# TF_VAR_SECRET1: "value1"
+# TF_VAR_SECRET2: "value2"
 ################################################

@@ -6,3 +6,64 @@ resources:
   - ingress.yml
   - service.yml
   - SecretfromEnv.yml
+  - targetgroupbinding.yml
+  - app-config.yml  # ConfigMap を直接指定
+
+namespace: tamakoapp
+
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: app-config
+      fieldPath: data.MYSQL_HOST
+    targets:
+      - select:
+          kind: Deployment
+          name: yamatodo-back
+        fieldPaths:
+          - spec.template.spec.initContainers[?(@.name=="wait-for-db")].command[0]
+          - spec.template.spec.containers[?(@.name=="back-app")].env[?(@.name=="MYSQL_HOST")].value
+      - select:
+          kind: Deployment
+          name: yamatodo
+        fieldPaths:
+          - spec.template.spec.initContainers[?(@.name=="wait-for-backend")].command[0]
+      - select:
+          kind: Job
+          name: migrate-job
+        fieldPaths:
+          - spec.template.spec.initContainers[?(@.name=="wait-for-db")].command[0]
+          - spec.template.spec.containers[?(@.name=="db-migrate")].env[?(@.name=="MYSQL_HOST")].value
+
+  - source:
+      kind: ConfigMap
+      name: app-config
+      fieldPath: data.ECR_REPOSITORY
+    targets:
+      - select:
+          kind: Deployment
+          name: yamatodo-back
+        fieldPaths:
+          - spec.template.spec.containers[?(@.name=="back-app")].image
+      - select:
+          kind: Deployment
+          name: yamatodo-front
+        fieldPaths:
+          - spec.template.spec.containers[?(@.name=="front-app")].image
+      - select:
+          kind: Job
+          name: migrate-job
+        fieldPaths:
+          - spec.template.spec.containers[?(@.name=="db-migrate")].image
+
+  - source:
+      kind: ConfigMap
+      name: app-config
+      fieldPath: data.TARGET_GROUP_ARN
+    targets:
+      - select:
+          kind: TargetGroupBinding
+          name: tamako-alb-tg-binding
+        fieldPaths:
+          - spec.targetGroupARN

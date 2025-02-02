@@ -2,7 +2,7 @@
 
 ################### ローカル環境にシークレット変数を設定するために実施 ###################
 # プロジェクトディレクトリ名を設定
-PROJECT_DIR_NAME="MyTodoWebApplication_practice_on_AWS"
+PROJECT_DIR_NAME="MyTodoWebApplication_on_AWS"
 
 # プロジェクトディレクトリの絶対パスを検索
 PROJECT_DIR_PATH=$(find $HOME/Desktop/repo -type d -name "$PROJECT_DIR_NAME" 2>/dev/null | head -n 1)
@@ -28,10 +28,10 @@ if ! command -v yq &> /dev/null; then
 fi
 
 # secrets.ymlからシークレット変数を1行ずつ読み込む
-yq eval 'keys | .[]' "$SECRETFILE" | while read -r SECRET; do
-    VALUE=$(yq eval ".$SECRET" "$SECRETFILE")
-    export "$SECRET"="$VALUE"
-    echo "Exported $SECRET with value $VALUE"
+yq eval 'keys | .[]' "$SECRETFILE" | while read -r TF_VAR_SECRET; do
+    VALUE=$(yq eval ".$TF_VAR_SECRET" "$SECRETFILE")
+    export "$TF_VAR_SECRET"="$VALUE"
+    echo "Exported $TF_VAR_SECRET"
 done
 
 echo "All secret variables have been exported to the local environment."
@@ -39,6 +39,6 @@ echo "All secret variables have been exported to the local environment."
 ################################################
 ## please create "secrets.yml" in the following format:
 # EXAMPLE:
-# VAR1: "value1"
-# VAR2: "value2"
+# TF_VAR_SECRET1: "value1"
+# TF_VAR_SECRET2: "value2"
 ################################################

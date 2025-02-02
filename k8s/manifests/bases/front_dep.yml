@@ -18,10 +18,10 @@ spec:
       initContainers:
       - name: wait-for-backend
         image: busybox
-        command: ['sh', '-c', 'until nslookup back-service.tamakoapp.svc.cluster.local; do echo waiting for frontend; sleep 5; done;sleep 10'] #nslookupが成功して名前解決できた後、さらに10秒間待機
+        command: ['sh', '-c', 'until nslookup tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com; do echo waiting for db; sleep 5; done;sleep 10'] # 後で修正検討
       containers:
         - name: front-app
-          image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:front-prodv3
+          image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:front-prodv3 # 後で修正検討
           imagePullPolicy: Always 
           resources:
             limits:

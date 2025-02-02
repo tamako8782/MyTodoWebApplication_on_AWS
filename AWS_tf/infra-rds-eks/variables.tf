@@ -9,6 +9,7 @@ variable "region" {
 variable "key_name" {
   description = "Key pair name for EC2 instance maintenance"
   type        = string
+  sensitive   = true
 }
 
 
@@ -38,11 +39,6 @@ variable "eks_managed_node_group_name" {
 }
 
 
-// repository name for ECR
-variable "ecr_repo_name" {
-  description = "ECR repository name"
-  type        = string
-}
 
 // CommonSetting for RDS
 variable "identifier" {

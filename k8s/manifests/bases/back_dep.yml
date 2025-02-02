@@ -19,11 +19,11 @@ spec:
       initContainers:
       - name: wait-for-db
         image: busybox
-        command: ['sh', '-c', 'until nslookup tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com; do echo waiting for db; sleep 5; done;sleep 10']
+        command: ['sh', '-c', 'until nslookup tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com; do echo waiting for db; sleep 5; done;sleep 10'] # 後で修正検討
       serviceAccountName: secrets-access
       containers:
       - name: back-app
-        image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:back-prodv2
+        image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:back-prodv2 # 後で修正検討
         imagePullPolicy: Always
         resources:
           limits:
@@ -38,7 +38,7 @@ spec:
               name: tamako-db-secret
               key: db_name
         - name: MYSQL_HOST
-          value: tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com
+          value: tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com # 後で修正検討
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
