@@ -1,4 +1,4 @@
-# MyTodoWebApplication_on_AWS 作成プロジェクトについて@v0.0.1
+# MyTodoWebApplication_on_AWS 作成プロジェクトについて@v0.0.2
 
 ## 0. メタ情報
 ### 0.1 作成者
