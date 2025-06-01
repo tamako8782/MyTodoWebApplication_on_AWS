@@ -4,7 +4,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws" // AWSプロバイダーを使用
-      version = "5.76.0"     // AWSプロバイダーのバージョン要件
+      version = "5.79.0"     // AWSプロバイダーのバージョン要件
     }
   }
 // バックエンドの設定(S3、DynamoDBが作成されたあとに使用されるべき)

@@ -1,4 +1,4 @@
-# MyTodoWebApplication_on_AWS 作成プロジェクトについて@v0.0.1
+# MyTodoWebApplication_on_AWS 作成プロジェクトについて@v0.0.2
 
 ## 0. メタ情報
 ### 0.1 作成者
@@ -6,13 +6,14 @@
 - 共同作成者: -
 - github: https://github.com/tamako8782
 - x: https://x.com/tamako8782
+- zenn:https://zenn.dev/tamako8782/articles/30b1bfcee3abbd
 
 ### 0.2 改定履歴
 
 | # | 版数   | 改定内容                       | 改定者   | 改定日       |
 |----------|-----------|--------------------------------|----------|--------------|
 | 1        | v0.0.1    | 初版作成                       | tamako8782 | 2024-12-07   |
-| 2        |     |        |  |    |
+| 2        | v0.0.2    | target group bindingを使って既存ALBからのアクセスを可能とした       | tamako8782 | 2025-02-02   |
 | 3        |     |        |  |    |
 | 4        |     |        |  |    |
 | 5        |     |        |  |    |
@@ -211,10 +212,6 @@ https://github.com/user-attachments/assets/b3c6c823-2192-4004-96e2-460e05f6ac97
   - 全体アーキテクチャ構成図
 ![EKS構成図](./diagram/Architecture_Diagram.png)
     
-  - クラスター構成図(ローカルのkindで動かす場合)
-
-![クラスター構成図](./diagram/cluster_diagram.png)
-
 
 ### 3.2 主要コンポーネント一覧
 - **Webサーバ**: Nginx 1.27.2

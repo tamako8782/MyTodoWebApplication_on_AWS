@@ -10,14 +10,14 @@ spec:
       initContainers:
       - name: wait-for-db
         image: busybox
-        command: ['sh', '-c', 'until nslookup tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com; do echo waiting for db; sleep 5; done;sleep 10']
+        command: ['sh', '-c', 'until nslookup tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com; do echo waiting for db; sleep 5; done;sleep 10'] # 後で修正検討
       serviceAccountName: secrets-access
       containers:
       - name: db-migrate
-        image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:db-migrate-prodv6
+        image: 296062576098.dkr.ecr.ap-northeast-1.amazonaws.com/tamako-ecr/main:db-migrate-prodv6 # 後で修正検討
         env:
         - name: MYSQL_HOST
-          value: tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com
+          value: tamako-db.criiqsqeswc6.ap-northeast-1.rds.amazonaws.com # 後で修正検討
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:

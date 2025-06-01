@@ -5,11 +5,7 @@ variable "region" {
   default     = "ap-northeast-1"
 }
 
-// DNS zone name for Route53
-variable "dns_zone_name" {
-  description = "DNS zone name"
+variable "kustomize_bases_path" {
+  description = "Path to the Kustomize base directory"
   type        = string
-
 }
-
-

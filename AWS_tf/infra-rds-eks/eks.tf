@@ -2,43 +2,38 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~>20.0"
 
-  # クラスターの基本設定
-  cluster_name                    = var.cluster_name    # クラスター名
-  cluster_version                 = var.cluster_version # クラスターのKubernetesバージョン
-  cluster_endpoint_private_access = true                # クラスターのプライベートアクセスを有効化
-  cluster_endpoint_public_access  = true                # クラスターのパブリックアクセスを有効化
+  cluster_name                    = var.cluster_name    
+  cluster_version                = var.cluster_version 
+  cluster_endpoint_private_access = true                
+  cluster_endpoint_public_access  = true                
 
-  # クラスターが関連付けられるVPCとサブネットの設定
-  vpc_id = resource.aws_vpc.tamako_vpc.id # VPC ID
-  subnet_ids = [                          # クラスターに関連付けるプライベートサブネット
+  vpc_id = resource.aws_vpc.tamako_vpc.id 
+  subnet_ids = [                          
     resource.aws_subnet.tamako_prisub1.id,
     resource.aws_subnet.tamako_prisub2.id
   ]
-  enable_irsa = true # IAM Roles for Service Accounts (IRSA) を有効化
+  enable_irsa = true 
 
-  # デフォルトのノードグループ設定
   eks_managed_node_group_defaults = {
-    instance_types = ["t3.medium"] # ノードタイプを指定
+    instance_types = ["t3.medium"] 
   }
 
-  # カスタムノードグループの設定
   eks_managed_node_groups = {
     "${var.eks_managed_node_group_name}" = {
-      desired_size   = 2             # ノード数
-      instance_types = ["t3.medium"] # ノードタイプ
-      subnet_ids = [                 # ノードが使用するサブネット
+      desired_size   = 2             
+      instance_types = ["t3.medium"] 
+      subnet_ids = [                 
         resource.aws_subnet.tamako_prisub1.id,
         resource.aws_subnet.tamako_prisub2.id
       ]
-      disk_size     = 20          # ノードのディスクサイズ (GB)
-      capacity_type = "ON_DEMAND" # オンデマンドインスタンスを使用
+      disk_size     = 20          
+      capacity_type = "ON_DEMAND" 
     }
   }
 
-  # アドオンの設定
   cluster_addons = {
     coredns = {
-      most_recent = true # 最新バージョンを使用
+      most_recent = true 
     }
     kube-proxy = {
       most_recent = true
@@ -50,24 +45,21 @@ module "eks" {
       most_recent = true
     }
     vpc-cni = {
-      most_recent    = true # 最新バージョンのCNIプラグイン
-      before_compute = true # コンピュートリソースの作成前に実行
+      most_recent    = true 
+      before_compute = true 
       configuration_values = jsonencode({
         env = {
-          AWS_VPC_K8S_CNI_EXTERNALSNAT = "true" # NAT Gateway経由での外部通信を有効化
-          ENABLE_PREFIX_DELEGATION     = "true" # IPアドレスプールの効率的利用を有効化
-          WARM_PREFIX_TARGET           = "1"    # IPプレフィックスのプールサイズ
+          AWS_VPC_K8S_CNI_EXTERNALSNAT = "true" 
+          ENABLE_PREFIX_DELEGATION     = "true" 
+          WARM_PREFIX_TARGET           = "1"    
         }
       })
     }
   }
 
-  # クラスター管理者権限の付与
   enable_cluster_creator_admin_permissions = true
 
-  # ノードセキュリティグループの追加ルール
   node_security_group_additional_rules = {
-    # AdmissionWebhook用の通信を許可 (inbound)
     admission_webhook = {
       description                   = "Admission Webhook"
       protocol                      = "tcp"
@@ -76,7 +68,6 @@ module "eks" {
       type                          = "ingress"
       source_cluster_security_group = true
     }
-    # ノード間通信を許可 (inbound)
     ingress_mode_communications = {
       description = "Ingress Node to Node"
       protocol    = "tcp"
@@ -85,7 +76,6 @@ module "eks" {
       type        = "ingress"
       self        = true
     }
-    # ノード間通信を許可 (outbound)
     egress_node_communications = {
       description = "Egress Node to Node"
       protocol    = "tcp"
@@ -94,7 +84,6 @@ module "eks" {
       type        = "egress"
       self        = true
     }
-    # ノードからVPC内リソースへの通信を許可 (outbound)
     egress_node_to_local = {
       description = "Egress Node to Local"
       type        = "egress"
@@ -103,5 +92,23 @@ module "eks" {
       protocol    = "tcp"
       cidr_blocks = [resource.aws_vpc.tamako_vpc.cidr_block]
     }
+    # HTTP トラフィックを許可（必要に応じて追加）
+  ingress_http = {
+    description = "Allow HTTP traffic to EKS nodes"
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    type        = "ingress"
+    cidr_blocks = ["0.0.0.0/0"] # または特定のソース CIDR
+  }
+  # HTTPS トラフィックを許可
+  ingress_https = {
+    description = "Allow HTTPS traffic to EKS nodes"
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    type        = "ingress"
+    cidr_blocks = ["0.0.0.0/0"] # または特定のソース CIDR
+  }
   }
 }

@@ -11,7 +11,7 @@ terraform {
   // バックエンドの設定(別口で作成したS3、DynamoDBを使用する)
   backend "s3" {
     bucket         = "tamako8782-mytodowebapplication-tfstate"
-    key            = "src_mytodowebapplication_cfn_dns/terraform.tfstate"
+    key            = "src_mytodowebapplication_general/terraform.tfstate"
     region         = "ap-northeast-1"
     dynamodb_table = "tamako8782-mytodowebapplication-lock"
     encrypt        = true
